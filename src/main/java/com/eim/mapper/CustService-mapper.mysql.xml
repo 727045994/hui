@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.eim.mapper.CustServiceMapper">
+	<sql id="column">
+		t.id id,
+		t.account account,
+		t.password password
+	</sql>
+	<sql id="condition">
+			<if test="id != null and id != ''">AND t.id = #{id}</if>
+			<if test="account != null and account != ''">AND t.account = #{account}</if>
+			<if test="password != null and password != ''">AND t.password = #{password}</if>
+	</sql>
+	<select id="get" parameterType="java.util.Map" resultType="com.eim.model.CustServiceInfo">
+		SELECT
+			<include refid="column"/>
+		FROM CUST_SERVICE t
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<include refid="condition"/>
+		</trim>
+	</select>
+	<select id="getList" parameterType="java.util.Map" resultType="com.eim.model.CustServiceInfo">
+		SELECT
+			<include refid="column"/>
+		FROM CUST_SERVICE t
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<include refid="condition"/>
+		</trim>
+	</select>
+	<insert id="insert" parameterType="com.eim.model.CustServiceInfo">
+	insert into CUST_SERVICE
+	(
+		account,
+		password
+	)
+	values
+	(
+		#{account},
+		#{password}
+	)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.eim.model.CustServiceInfo">
+		UPDATE CUST_SERVICE
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="id != null">
+				id = #{id},
+			</if>
+			<if test="account != null">
+				account = #{account},
+			</if>
+			<if test="password != null">
+				password = #{password},
+			</if>
+		</trim>
+		WHERE id=#{id}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		DELETE FROM CUST_SERVICE WHERE id=#{id}
+	</delete>
+	<delete id="delete" parameterType="java.util.List">
+		DELETE FROM CUST_SERVICE WHERE ID IN
+		<foreach collection="list" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	<delete id="deleteObj" parameterType="java.util.List">
+		DELETE FROM CUST_SERVICE WHERE ID IN
+		<foreach collection="list" item="obj" open="(" separator="," close=")">
+			#{obj.id}
+		</foreach>
+	</delete>
+	<select id="getByPrimaryKey" parameterType="java.lang.String" resultType="com.eim.model.CustServiceInfo">
+		SELECT
+			<include refid="column"/>
+		FROM CUST_SERVICE t
+		WHERE id=#{id}
+	</select>
+</mapper>
+
+
